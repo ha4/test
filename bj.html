@@ -1,0 +1,77 @@
+﻿﻿<meta charset=utf-8>
+<script>
+function getRandomInt(min, max)
+{
+	return Math.floor(Math.random() * (max-min+1) + min);
+}
+
+function getCard()
+{
+	var cards = ['6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+	return cards[getRandomInt(0, cards.length-1)];
+}
+
+function getSum(hand)
+{
+	var sum = 0;
+	for(var a=0; a < hand.length; a++) {
+		var card = hand[a];
+		if (card != 'A') {
+		   if (card == 'J' || card == 'Q' || card == 'K') { sum += 10; }
+		   else { sum += parseInt(card); }
+		}
+	}
+	for(var a=0; a < hand.length; a++) {
+		var card = hand[a];
+		if (card == 'A') {
+			if (sum > 10) { sum += 1; } else {sum += 11; }
+		}
+	}
+	return sum;
+}
+
+function getStatus() 
+{
+	return 'Дилер: ' + dealer.join(' ') + ' Игрок: '+player.join(' ') + '.';
+}
+
+
+var dealer = [getCard()];
+var player = [getCard(), getCard()];
+var answer = '';
+
+if (getSum(player)==21) {
+	alert('Блэк Ждек на раздаче! поздр. '+getStatus());
+} else {
+do {
+	answer = prompt(getStatus() + '\n Хотите еще карту? [y]es, или no');
+	if (answer == 'y') {
+		player.push(getCard());
+		sum = getSum(player);
+		if (sum > 21) {
+			alert('Перебор. проигр. ' + getStatus());
+			break;
+		} else if (sum == 21) {
+			alert('Блэк Ждек! поздр. ' + getStatus());
+			break;
+		}
+	} else {
+		while(getSum(dealer) < 17) { dealer.push(getCard()); }
+		sumD = getSum(dealer);
+		sumP = getSum(player);
+		if (sumD >= 21) {
+			alert('Перебор у дилера. поздр.' + getStatus());
+		} else if (sumD == 21) {
+			alert('Блэк Джек у дилера. проигр.' + getStatus());
+		} else if (sumD == sumP) {
+			alert('Ничья' + getStatus());
+		} else if (sumP > sumD) {
+			alert('Выигрыш. поздр.' + getStatus());
+		} else {
+			alert('Проигрыш. проигр.' + getStatus());
+		}
+	}
+
+} while(answer == 'y');
+}
+</script>
